@@ -5,7 +5,7 @@ var app = express();
 mongoose.connect("mongodb://localhost/ConventionPlannerDemo");
 
 app.get("/",function(req,res){
-    req.send("Hello");
+    res.send("Hello");
 })
 
 var PORT = process.env.PORT||3000;
