@@ -40,4 +40,4 @@ const UserSchema = new Schema({
 // this.password = bcrypt.hashSync(this.password, saltRounds);
 // next();
 // });
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Users', UserSchema);

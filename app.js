@@ -4,12 +4,15 @@ var jwt = require("jsonwebtoken");
 var mongoose =require("mongoose");
 var bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
+const methodOverride = require('method-override');
 var app = express();
 
 //Routes
 const authRoutes = require("./app/api/routes/auth")
+const eventRoutes = require("./app/api/routes/event")
 
 mongoose.connect("mongodb://localhost/ConventionPlannerDemo");
+app.use(methodOverride('_method'));
 
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -23,6 +26,7 @@ app.get("/",function(req,res){
 })
 
 app.use(authRoutes);
+app.use(eventRoutes);
 
 
 var PORT = process.env.PORT||3000;
