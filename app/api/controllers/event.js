@@ -6,7 +6,7 @@ const Event= require("../model/event")
 module.exports = {
     create: function(req,res,next){
         User.findById(req.id,function(err,user){
-            if(err){
+            if(err || user==null){
                 res.json({status:"error", message: "Some Error has occured "+err, data:null});
             } else{
                 Event.create(req.body,function(err,event){
@@ -22,40 +22,74 @@ module.exports = {
         })
     },
     showEvent:function(req,res,next){
-        Event.findById(req.params.eventid,function(err,event){
+        User.findById(req.id,function(err,user){
             if(err){
                 res.json({status:"error", message: "Some Error has occured "+err, data:null});
-            } else if(event==null){
-                res.json({status:"error", message: "No event found", data:null});
-            }else{
-                res.json({status:"success", message: "Event Details", data:event});
+            } else{
+                console.log(req.params.eventid in user.events);
+                if(user.events.includes(req.params.eventid)){
+                    Event.findById(req.params.eventid,function(err,event){
+                        if(err){
+                            res.json({status:"error", message: "Some Error has occured "+err, data:null});
+                        } else if(event==null){
+                            res.json({status:"error", message: "No event found", data:null});
+                        }else{
+                            res.json({status:"success", message: "Event Details", data:event});
+                        }
+                    })
+                } else{
+                    res.send(403)
+                }
             }
         })
+        
     },
     updateEvent:function(req,res,next){
-        Event.findByIdAndUpdate(req.params.eventid,req.body, {new: true},function(err,event){
+        User.findById(req.id,function(err,user){
             if(err){
                 res.json({status:"error", message: "Some Error has occured "+err, data:null});
             } else{
-                res.json({status:"success", message: "Event Updated Details", data:event});
+                if(user.events.includes(req.params.eventid)){
+                    Event.findByIdAndUpdate(req.params.eventid,req.body, {new: true},function(err,event){
+                        if(err){
+                            res.json({status:"error", message: "Some Error has occured "+err, data:null});
+                        } else{
+                            res.json({status:"success", message: "Event Updated Details", data:event});
+                        }
+                    })
+                } else{
+                    res.send(403)
+                }
             }
         })
+       
     },
     deleteEvent:function(req,res,next){
-        Event.findByIdAndRemove(req.params.eventid,req.body,function(err,event){
+        User.findById(req.id,function(err,user){
             if(err){
                 res.json({status:"error", message: "Some Error has occured "+err, data:null});
             } else{
-                res.json({status:"success", message: "Event Deleted", data:event});
+                if(user.events.includes(req.params.eventid)){
+                    Event.findByIdAndRemove(req.params.eventid,req.body,function(err,event){
+                        if(err){
+                            res.json({status:"error", message: "Some Error has occured "+err, data:null});
+                        } else{
+                            res.json({status:"success", message: "Event Deleted", data:event});
+                        }
+                    })
+                } else{
+                    res.send(403)
+                }
             }
         })
+        
     },
     showEvents:function(req,res,next){
-        Event.find({},function(err,events){
+        User.findById(req.id).populate("events").exec(function(err,user){
             if(err){
                 res.json({status:"error", message: "Some Error has occured "+err, data:null});
             } else{
-                res.json({status:"success", message: "Events Details", data:events});
+                res.json({status:"success", message: "Events Details", data:user.events});
             }
         })
     }

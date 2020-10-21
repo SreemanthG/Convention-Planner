@@ -5,11 +5,14 @@ var mongoose =require("mongoose");
 var bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const methodOverride = require('method-override');
+const cors = require("cors")
 var app = express();
 
+app.use(cors())
 //Routes
 const authRoutes = require("./app/api/routes/auth")
 const eventRoutes = require("./app/api/routes/event")
+const transactionRoutes = require("./app/api/routes/transaction")
 
 mongoose.connect("mongodb://localhost/ConventionPlannerDemo");
 app.use(methodOverride('_method'));
@@ -27,9 +30,10 @@ app.get("/",function(req,res){
 
 app.use(authRoutes);
 app.use(eventRoutes);
+app.use(transactionRoutes);
 
 
-var PORT = process.env.PORT||3000;
+var PORT = process.env.PORT||5000;
 app.listen(PORT, function(){
     console.log("App Started listening at "+ PORT)
 })

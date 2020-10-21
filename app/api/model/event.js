@@ -23,7 +23,7 @@ const EventsSchema = new Schema({
         ref: "Events",
         trim: true,
    }],
-    transaction: [{
+    transactions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Transactions",
         trim: true,
@@ -63,6 +63,7 @@ const EventsSchema = new Schema({
         trim: true,
         required: true
     },
+
 });
 
 module.exports = mongoose.model('Events', EventsSchema);
