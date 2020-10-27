@@ -2,12 +2,13 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 //Models
-const User= require("../model/user")
+const Customer= require("../model/customer")
+const Event= require("../model/event")
 module.exports = {
     create: function(req,res,next){
         console.log(req.body);
         req.body.user.password =  bcrypt.hashSync(req.body.user.password, 10);
-        User.create( req.body.user,function(err,userModel){
+        Customer.create( req.body.user,function(err,userModel){
             if(err)
                 next(err)
             else
@@ -15,10 +16,9 @@ module.exports = {
         })
     },
 
-
     authenticate: function(req,res,next){
         console.log(req.body);
-        User.findOne({email:req.body.email},function(err,userModel){
+        Customer.findOne({email:req.body.email},function(err,userModel){
             if (err || userModel==null) {
                 // next(err);
                 res.json({status:"error", message: "Invalid email/password!!!", data:err});
@@ -33,5 +33,31 @@ module.exports = {
                     }
                }
         })
+    },
+    registerEvent: function(req,res,next){
+        
+        Event.findById(req.params.id,function(err,event){
+            if(err){
+                res.json({status:"error", message: "Some error has occured 1", data:null});
+            } else{
+                Customer.findById(req.id,function(err,cus){
+                    if(err){
+                         res.json({status:"error", message: "Some error has occured 2", data:null});
+                    } else{
+                        if(cus.events.includes(event._id)){
+                           res.json({status:"error", message: "Already Registered!!!"});
+                        }
+                        event.customers.push(cus._id);
+                        event.save();
+                        cus.events.push(event._id);
+                        cus.save();
+                        res.json({status:"success", message: "Event Registered!!!", data: cus});
+                        
+                    }
+                })
+            }
+        })
     }
+
+
 }

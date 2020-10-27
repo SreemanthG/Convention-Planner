@@ -34,6 +34,11 @@ const UserSchema = new Schema({
     trim: true,
     required: true
     },
+    role:{
+        type:Number,
+        trim:true,
+        default:0
+    }
     });
 // hash user password before saving into database
 // UserSchema.pre('save', function(next){

@@ -5,7 +5,6 @@ const Event= require("../model/event")
 const Transaction= require("../model/transaction");
 const e = require('express');
 
-
 module.exports = {
     create: function(req,res,next){
 
@@ -89,5 +88,15 @@ module.exports = {
             }
         })
         
+    },
+    dashboardTransactions:function(req,res,next){
+
+        Transaction.find({"user":req.params.id}).sort({timestamp:-1}).limit(Number(req.query["offset"])).exec(function(err,transactions){
+            if(err){
+                res.json({status:"error", message: "Some Error has occured "+err, data:null});
+            } else{
+                res.json({status:"success", message: "Transactions", data:transactions});
+            }
+        })
     }
 }

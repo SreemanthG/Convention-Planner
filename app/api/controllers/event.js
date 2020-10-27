@@ -15,7 +15,7 @@ module.exports = {
                     } else{
                             user.events.push(event._id)
                             user.save();
-                            res.json({status:"success", message: "Events added successfully!!", data:user});
+                            res.json({status:"success", message: "Events added successfully!!", data:event});
                         }
                 })
             }

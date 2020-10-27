@@ -33,11 +33,11 @@ const EventsSchema = new Schema({
         ref: "Tickets",
         trim: true,
    }],
-    registered: {
-        type: Number,
-        trim: true,
-        default: 0
-    },
+    // registered: {
+    //     type: Number,
+    //     trim: true,
+    //     default: 0
+    // },
     city: {
         type: String,
         trim: true,
@@ -63,7 +63,12 @@ const EventsSchema = new Schema({
         trim: true,
         required: true
     },
-
+    time: {
+        type: Date,
+        trim: true,
+        required: true
+    },
+    
 });
 
 module.exports = mongoose.model('Events', EventsSchema);

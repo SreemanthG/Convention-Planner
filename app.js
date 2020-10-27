@@ -13,12 +13,16 @@ app.use(cors())
 const authRoutes = require("./app/api/routes/auth")
 const eventRoutes = require("./app/api/routes/event")
 const transactionRoutes = require("./app/api/routes/transaction")
+const customerRoutes = require("./app/api/routes/customer")
 
 mongoose.connect("mongodb://localhost/ConventionPlannerDemo");
 app.use(methodOverride('_method'));
 
 app.use(express.static(__dirname+"/public"));
+// parse application/json
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use(function(req,res,next){
     res.locals.id=req.id;
     next();
@@ -31,6 +35,7 @@ app.get("/",function(req,res){
 app.use(authRoutes);
 app.use(eventRoutes);
 app.use(transactionRoutes);
+app.use(customerRoutes);
 
 
 var PORT = process.env.PORT||5000;
