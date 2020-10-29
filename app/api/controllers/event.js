@@ -70,7 +70,7 @@ module.exports = {
                 res.json({status:"error", message: "Some Error has occured "+err, data:null});
             } else{
                 if(user.events.includes(req.params.eventid)){
-                    Event.findByIdAndRemove(req.params.eventid,req.body,function(err,event){
+                    Event.findByIdAndRemove(req.params.eventid,function(err,event){
                         if(err){
                             res.json({status:"error", message: "Some Error has occured "+err, data:null});
                         } else{
@@ -85,11 +85,27 @@ module.exports = {
         
     },
     showEvents:function(req,res,next){
-        User.findById(req.id).populate("events").exec(function(err,user){
+        User.findById(req.id).populate({ 
+            path: 'events',
+            populate: {
+              path: 'transactions',
+              model: 'Transactions'
+            } 
+         }).exec(function(err,user){
             if(err){
                 res.json({status:"error", message: "Some Error has occured "+err, data:null});
             } else{
                 res.json({status:"success", message: "Events Details", data:user.events});
+            }
+        })
+    },
+    showCustomers:function(req,res){
+        Event.findById(req.params.id).populate('customers').exec(function(err,event){
+            if(err){
+                res.json({status:"error", message: "Some error has occured "+err});
+            } else{
+                res.json({status:"success", message: "Event Participants!!!", data: event.customers});
+        
             }
         })
     }

@@ -22,9 +22,11 @@ module.exports = {
                                 if(err || transaction == null){
                                     res.json({status:"error", message: "Some Error has occured "+err, data:null});
                                 } else{
+                                    user.budget = user.budget-transaction.amount
+                                    user.save();
                                     transaction.user=user._id
                                     transaction.save()
-                                    event.transactions.push(transaction)
+                                    event.transactions.push(transaction._id)
                                     event.save();
                                     res.json({status:"success", message: "Transaction added successfully!!", data:event});
     
@@ -91,7 +93,7 @@ module.exports = {
     },
     dashboardTransactions:function(req,res,next){
 
-        Transaction.find({"user":req.params.id}).sort({timestamp:-1}).limit(Number(req.query["offset"])).exec(function(err,transactions){
+        Transaction.find({"user":req.id}).sort({timestamp:-1}).limit(Number(req.query["offset"])).exec(function(err,transactions){
             if(err){
                 res.json({status:"error", message: "Some Error has occured "+err, data:null});
             } else{

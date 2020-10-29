@@ -15,7 +15,7 @@ const eventRoutes = require("./app/api/routes/event")
 const transactionRoutes = require("./app/api/routes/transaction")
 const customerRoutes = require("./app/api/routes/customer")
 
-mongoose.connect("mongodb://localhost/ConventionPlannerDemo");
+mongoose.connect("mongodb://localhost/ConventionPlanner");
 app.use(methodOverride('_method'));
 
 app.use(express.static(__dirname+"/public"));

@@ -20,7 +20,7 @@ const EventsSchema = new Schema({
     },
     customers: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Events",
+        ref: "Customers",
         trim: true,
    }],
     transactions: [{

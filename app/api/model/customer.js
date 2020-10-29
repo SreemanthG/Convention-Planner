@@ -23,7 +23,7 @@
         type: mongoose.Schema.Types.ObjectId,
         ref: "Events",
         trim: true,
-    }],
+        }],
         number: {
         type: Number,
         trim: true,
@@ -33,11 +33,16 @@
             type:Number,
             trim:true,
             default:1
-        }
+        },
+        tickets: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Tickets",
+            trim: true,
+       }],
         });
     // hash user password before saving into database
     // UserSchema.pre('save', function(next){
     // this.password = bcrypt.hashSync(this.password, saltRounds);
     // next();
     // });
-    module.exports = mongoose.model('Customer', CustomerSchema);
+    module.exports = mongoose.model('Customers', CustomerSchema);

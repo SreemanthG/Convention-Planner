@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 //Models
 const Customer= require("../model/customer")
 const Event= require("../model/event")
+const Ticket= require("../model/ticket");
+const customer = require('../model/customer');
 module.exports = {
     create: function(req,res,next){
         console.log(req.body);
@@ -35,7 +37,6 @@ module.exports = {
         })
     },
     registerEvent: function(req,res,next){
-        
         Event.findById(req.params.id,function(err,event){
             if(err){
                 res.json({status:"error", message: "Some error has occured 1", data:null});
@@ -46,18 +47,36 @@ module.exports = {
                     } else{
                         if(cus.events.includes(event._id)){
                            res.json({status:"error", message: "Already Registered!!!"});
+                        } else{
+                            Ticket.create({"event":event._id,"customer":cus._id},function(err,ticket){
+                                if(err){
+                                    res.json({status:"error", message: "Some error has occured 1", data:null});
+                                } else{
+                                    event.customers.push(cus._id);
+                                    event.tickets.push(ticket._id);
+                                    event.save();
+                                    cus.events.push(event._id);
+                                    cus.tickets.push(ticket._id);
+                                    cus.save();
+                                    res.json({status:"success", message: "Event Registered!!!", data: cus});
+                                }
+                            })
                         }
-                        event.customers.push(cus._id);
-                        event.save();
-                        cus.events.push(event._id);
-                        cus.save();
-                        res.json({status:"success", message: "Event Registered!!!", data: cus});
-                        
+                      
                     }
                 })
             }
         })
-    }
+    },
+    viewEvents:function(req,res,next){
+        Event.find({},function(err,events){
+            if(err){
+                res.json({status:"error", message: "Some Error has occured "+err, data:null});
+            } else{
+                res.json({status:"success", message: "Events Details", data:events});
+            }
+        })
+    },
 
 
 }

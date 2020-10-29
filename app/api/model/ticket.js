@@ -9,9 +9,11 @@ const TicketSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Events",
     trim: true,
+    required: true
    },
     customer: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Customers",
     trim: true,
     required: true
     },
@@ -21,4 +23,4 @@ const TicketSchema = new Schema({
 // this.password = bcrypt.hashSync(this.password, saltRounds);
 // next();
 // });
-module.exports = mongoose.model('Ticket', TicketSchema);
+module.exports = mongoose.model('Tickets', TicketSchema);

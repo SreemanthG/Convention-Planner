@@ -34,6 +34,11 @@ const UserSchema = new Schema({
     trim: true,
     required: true
     },
+    budget:{
+        type:Number,
+        trime:true,
+        default:0
+    },
     role:{
         type:Number,
         trim:true,

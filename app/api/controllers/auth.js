@@ -33,5 +33,14 @@ module.exports = {
                     }
                }
         })
+    },
+    profile:function(req,res){
+        User.findById(req.id).populate('events').exec(function(err,user){
+            if(err){
+                res.json({status:"error", message: "Some error has occured", data:err});
+            } else{
+                res.json({status:"success", message: "user details!!!", data:{user: user}});
+            }
+        })
     }
 }
